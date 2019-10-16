@@ -26,7 +26,7 @@
         ruleCustom: {
           age: [{
             required: true,
-            message: 'The name cannot be empty',
+            message: 'The age cannot be empty',
             trigger: 'blur'
           }]
         }
@@ -37,28 +37,31 @@
     },
     methods: {
       handleSubmit(name) {
+        let self=this;
         this.$refs[name].validate((valid) => {
-              if (valid) {
-                this.axios.post('/api/add', this.qs.stringify({
-                    'name': this.formCustom.name,
-                    'age': this.formCustom.age
-                  }), {
-                    headers: {
-                      'Content-Type': 'application/x-www-form-urlencoded'
-                    }
-                  })
-                  .then(function(res) {
-                    this.$Message.success('提交成功!');
-                      console.log(res.data)
-                    })
-                 }
+          if (valid) {
+            this.axios.post('http://localhost:3000/api/add', this.qs.stringify({
+                'name': this.formCustom.name,
+                'age': parseInt(this.formCustom.age)
+              }), {
+                headers: {
+                  'Content-Type': 'application/x-www-form-urlencoded'
+                }
               })
-          },
-          handleReset(name) {
-            this.$refs[name].resetFields();
+              .then(function(res) {
+                self.$Message.success('提交成功!');
+                console.log(res.data)
+              })
           }
+        })
+      },
+      handleReset(name) {
+        this.$refs[name].resetFields();
       }
+    },
+    mounted() {
     }
+  }
 </script>
 
 <style lang="scss" scoped>

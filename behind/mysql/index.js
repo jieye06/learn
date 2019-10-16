@@ -13,14 +13,14 @@ class Mysql {
 
     }
     query (data) {
-		let sql="insert into user(name,age) values("+data.name+","+data.age+")"
+		let sql="insert into user value("+"'"+data.name+"'"+","+data.age+")"
       return new Promise((resolve, reject) => {
         pool.query(sql, function (error, results, fields) {
             if (error) {
                 throw error
             };
+			console.log(results)
             resolve(results)
-            // console.log('The solution is: ', results[0].solution);
         });
       })
        
