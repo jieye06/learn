@@ -1,12 +1,12 @@
 <template>
   <div class="container">
-    <div class="header">表单</div>
-    <Form ref="formCustom" :model="formCustom" :rules="ruleCustom" :label-width="80">
-      <FormItem label="名字" prop="name">
-        <Input type="text" v-model.sync="formCustom.name"></Input>
+    <div class="header">注册</div>
+    <Form ref="formCustom" :model="formCustom" :label-width="80">
+      <FormItem label="账号" prop="account">
+        <Input type="text" v-model.sync="formCustom.account"></Input>
       </FormItem>
-      <FormItem label="年龄" prop="age">
-        <Input type="text" v-model.sync="formCustom.age"></Input>
+      <FormItem label="密码" prop="password">
+        <Input type="text" v-model.sync="formCustom.password"></Input>
       </FormItem>
       <FormItem>
         <Button type="primary" @click="handleSubmit('formCustom')">提交</Button>
@@ -20,15 +20,8 @@
     data() {
       return {
         formCustom: {
-          name: '',
-          age: ''
-        },
-        ruleCustom: {
-          age: [{
-            required: true,
-            message: 'The age cannot be empty',
-            trigger: 'blur'
-          }]
+          account: '',
+          password: ''
         }
       }
     },
@@ -37,30 +30,29 @@
     },
     methods: {
       handleSubmit(name) {
-        let self=this;
-        this.$refs[name].validate((valid) => {
-          if (valid) {
-            this.axios.post('http://localhost:3000/api/add', this.qs.stringify({
-                'name': this.formCustom.name,
-                'age': parseInt(this.formCustom.age)
-              }), {
-                headers: {
-                  'Content-Type': 'application/x-www-form-urlencoded'
-                }
-              })
-              .then(function(res) {
-                self.$Message.success('提交成功!');
-                console.log(res.data)
-              })
-          }
-        })
+        let self = this;
+        if(this.account===''||this.password===''){
+          self.$Message.error('账号或密码不能为空！')
+          return;
+        }
+        this.axios.post('http://localhost:3000/api/add', this.qs.stringify({
+            'account': this.formCustom.account,
+            'password': this.formCustom.password
+          }), {
+            headers: {
+              'Content-Type': 'application/x-www-form-urlencoded'
+            }
+          })
+          .then(function(res) {
+            self.$Message.success('注册成功!');
+          })
+
       },
       handleReset(name) {
         this.$refs[name].resetFields();
       }
     },
-    mounted() {
-    }
+    mounted() {}
   }
 </script>
 
