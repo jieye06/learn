@@ -7,25 +7,32 @@ const sql = require('../behind/mysql')
 
 
 app.use(router['routes']()).use(router.allowedMethods());
-router.post('/api/add', koaBody(), async (ctx, next) => { //登录接口
+
+//注册
+router.post('/api/add', koaBody(), async (ctx, next) => {
 	ctx.set("Access-Control-Allow-Origin", "*");
 	var loginbody = ctx.request.body;
 	var logintemp = await sql.insertWholeData(loginbody).then(function(result) {
+		ctx.body = result
 		console.log(result);
 	}, function(error) {
-		cxt.throw(500)
+		// cxt.throw(500)
+		ctx.body = result
 	});
-	ctx.body = logintemp;
 })
 
-router.post('/api/login', koaBody(), async (ctx, next) => { //登录接口
+//登陆
+router.post('/api/login', koaBody(), async (ctx, next) => {
 	ctx.set("Access-Control-Allow-Origin", "*");
 	var loginbody = ctx.request.body;
 	var logintemp = await sql.isExist(loginbody, 'user').then(function(result) {
 		ctx.body = result
 	}, function(error) {
-		cxt.throw(500)
+		// cxt.throw(500)
+		ctx.body =result
 	});
 })
+
+//重置密码
 
 app.listen(3000);

@@ -15,15 +15,19 @@ class Mysql {
 	insertWholeData(data) {
 		let datalistStr = ''
 		for (var key in data) {
-			datalistStr = datalistStr + (datalistStr ? (","+"'"+data[key]+"'") : ("'"+data[key]+"'"))
+			datalistStr = datalistStr + (datalistStr ? ("," + (data[key] ? "'" + data[key] + "'" : null)) : (data[key] ? "'" +
+				data[key] + "'" : null))
 		}
-		let sql = "insert into user value(" + datalistStr+ ")"
+		let sql = "insert into user value(" + datalistStr + ")"
+		console.log(sql)
 		return new Promise((resolve, reject) => {
 			pool.query(sql, function(error, results, fields) {
 				if (error) {
-					throw error
+					results = {
+						responseCode: '100',
+						message: '数值不能为空'
+					}
 				};
-				console.log(results)
 				resolve(results)
 			});
 		})
@@ -32,9 +36,9 @@ class Mysql {
 		let sql = "select from user where"
 		return new Promise((resolve, reject) => {
 			pool.query(sql, function(error, results, fields) {
-				if (error) {
-					throw error
-				};
+				// if (error) {
+				// 	throw error
+				// };
 				console.log(results)
 				resolve(results)
 			});
@@ -55,6 +59,8 @@ class Mysql {
 				};
 				let resData = results[0]['count(*)']
 				resolve({
+					responseCode: '200',
+					message: 'success',
 					result: resData
 				})
 			});

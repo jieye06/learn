@@ -21,6 +21,7 @@
 </template>
 
 <script>
+  import api from '../http/api.js'
   export default {
     data() {
       return {
@@ -42,21 +43,22 @@
         let self = this;
         this.$refs[account].validate((valid) => {
           if (valid) {
-            this.axios.post('http://localhost:3000/api/login', this.qs.stringify({
-                'account': this.formCustom.account,
-                'password': this.formCustom.password
-              }), {
-                headers: {
-                  'Content-Type': 'application/x-www-form-urlencoded'
-                }
-              })
-              .then(function(res) {
-                console.log(res)
-                if(res.data.result){
-                   self.$Message.success('提交成功!');
-                  self.$router.push({ path:'/home'  })
-                }
-              })
+            api.login(this.formCustom).then(e=>{})
+            // this.axios.post('http://localhost:3000/api/login', this.qs.stringify({
+            //     'account': this.formCustom.account,
+            //     'password': this.formCustom.password
+            //   }), {
+            //     headers: {
+            //       'Content-Type': 'application/x-www-form-urlencoded'
+            //     }
+            //   })
+            //   .then(function(res) {
+            //     console.log(res)
+            //     if(res.data.result){
+            //        self.$Message.success('提交成功!');
+            //       self.$router.push({ path:'/home'  })
+            //     }
+            //   })
           }
         })
       },
